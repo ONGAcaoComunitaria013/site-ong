@@ -69,13 +69,48 @@
       <div class="contato-container">
         
         <!-- Formulário -->
-        <form id="formContato" class="contato-form">
-          <input type="text" name="nome" placeholder="Seu Nome" required>
-          <input type="email" name="email" placeholder="Seu E-mail" required>
-          <textarea name="mensagem" placeholder="Sua Mensagem" required></textarea>
-          <button type="submit" class="btn-primary">Enviar</button>
+        <form id="contato-form">
+          <label for="nome">Nome:</label>
+          <input type="text" id="nome" name="nome" required>
+        
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required>
+        
+          <label for="mensagem">Mensagem:</label>
+          <textarea id="mensagem" name="mensagem" rows="4" required></textarea>
+        
+          <button type="submit">Enviar</button>
         </form>
-    
+        
+        <p id="mensagem-status"></p>
+        
+        <script>
+          document.getElementById("contato-form").addEventListener("submit", async function (e) {
+            e.preventDefault();
+        
+            const nome = document.getElementById("nome").value;
+            const email = document.getElementById("email").value;
+            const mensagem = document.getElementById("mensagem").value;
+        
+            const resposta = await fetch("https://ong-acao-comunitaria.onrender.com/api/contato", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({ nome, email, mensagem })
+            });
+        
+            const resultado = document.getElementById("mensagem-status");
+        
+            if (resposta.ok) {
+              resultado.textContent = "Mensagem enviada com sucesso!";
+              this.reset();
+            } else {
+              resultado.textContent = "Erro ao enviar. Tente novamente mais tarde.";
+            }
+          });
+        </script>
+        
         <!-- Informações de contato -->
         <div class="contato-info">
           <p><strong>Endereço:</strong><br>
